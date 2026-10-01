@@ -1,9 +1,12 @@
 import type { PaginationView } from '@/lib/pagination';
+import type React from 'react';
 
 type Props = Pick<
   PaginationView,
   'hasNextPage' | 'hasPrevPage' | 'nextPageUrl' | 'prevPageUrl' | 'headerTip' | 'totalPages'
->;
+> & {
+  readonly onLinkClick?: ((event: React.MouseEvent<HTMLAnchorElement>) => void) | undefined;
+};
 
 const linkClass =
   'rounded-md border border-border px-3 py-2 text-text-muted focus-ring transition-colors hover:bg-surface-hover';
@@ -17,6 +20,7 @@ export function Pagination({
   prevPageUrl,
   headerTip,
   totalPages,
+  onLinkClick,
 }: Props) {
   if (totalPages <= 1) return null;
   return (
@@ -25,7 +29,7 @@ export function Pagination({
       aria-label="ترقيم الصفحات"
     >
       {hasNextPage ? (
-        <a href={nextPageUrl} rel="next" className={linkClass}>
+        <a href={nextPageUrl} rel="next" className={linkClass} onClick={onLinkClick}>
           التالي
         </a>
       ) : (
@@ -35,7 +39,7 @@ export function Pagination({
       )}
       <p className="text-base text-text-subtle">{headerTip}</p>
       {hasPrevPage ? (
-        <a href={prevPageUrl} rel="prev" className={linkClass}>
+        <a href={prevPageUrl} rel="prev" className={linkClass} onClick={onLinkClick}>
           السابق
         </a>
       ) : (

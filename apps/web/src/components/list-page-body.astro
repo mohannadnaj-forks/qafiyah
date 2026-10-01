@@ -11,8 +11,8 @@ import type { PaginationView } from '@/lib/pagination';
 
 interface Props {
   heading: string;
-  items: readonly CardListItem[];
-  emptyText: string;
+  items?: readonly CardListItem[] | undefined;
+  emptyText?: string | undefined;
   emptyVariant?: 'muted' | 'error' | undefined;
   crumbItems?: readonly BreadcrumbItem[] | undefined;
   pagination?: PaginationView | undefined;
@@ -22,7 +22,7 @@ interface Props {
 const {
   heading,
   items,
-  emptyText,
+  emptyText = '',
   emptyVariant = 'muted',
   crumbItems,
   pagination,
@@ -44,7 +44,7 @@ const retryHref = `${Astro.url.pathname}${Astro.url.search}`;
     }
     <slot />
     {
-      items.length === 0 && emptyVariant === 'error' ? (
+      items !== undefined && items.length === 0 && emptyVariant === 'error' ? (
         <div class={CARD_LIST_CLASS}>
           <div class="col-span-full flex flex-col items-center gap-3 rounded-lg border border-danger bg-surface-raised px-4 py-8 text-center">
             <p class="text-danger">{emptyText}</p>
@@ -67,7 +67,7 @@ const retryHref = `${Astro.url.pathname}${Astro.url.search}`;
           </div>
         </div>
       ) : (
-        <CardList items={items} emptyText={emptyText} />
+        items !== undefined && <CardList items={items} emptyText={emptyText} />
       )
     }
     {pagination && <Pagination {...pagination} />}
